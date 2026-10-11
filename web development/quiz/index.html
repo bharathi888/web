@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GK Master Quiz</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --primary:#6c63ff;
+    --secondary:#8f87ff;
+    --bg:#f4f6ff;
+    --card:#ffffff;
+    --text:#222;
+    --muted:#777;
+    --success:#22c55e;
+    --danger:#ef4444;
+    --border:#e5e7eb;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    transition:.3s;
+}
+
+body.dark{
+    --bg:#111827;
+    --card:#1f2937;
+    --text:#f9fafb;
+    --muted:#cbd5e1;
+    --border:#374151;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.app{
+    width:100%;
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
+}
+
+/* HEADER */
+
+header{
+    background:var(--card);
+    padding:18px 25px;
+    border-radius:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    color:var(--primary);
+}
+
+.header-right{
+    display:flex;
+    gap:10px;
+}
+
+.icon-btn{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:var(--bg);
+    font-size:18px;
+}
+
+/* HOME */
+
+.home{
+    background:var(--card);
+    border-radius:22px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.hero-icon{
+    font-size:80px;
+}
+
+.home h1{
+    font-size:42px;
+    margin:15px 0 10px;
+}
+
+.home p{
+    color:var(--muted);
+    margin-bottom:30px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:30px;
+}
+
+.stat{
+    background:var(--bg);
+    padding:20px;
+    border-radius:15px;
+}
+
+.stat strong{
+    display:block;
+    font-size:25px;
+    color:var(--primary);
+}
+
+.stat span{
+    font-size:13px;
+    color:var(--muted);
+}
+
+/* CATEGORY */
+
+.section-title{
+    margin:30px 0 15px;
+    text-align:left;
+}
+
+.categories{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.category{
+    padding:18px 10px;
+    border:2px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    border-radius:14px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.category:hover,
+.category.selected{
+    border-color:var(--primary);
+    background:var(--primary);
+    color:white;
+}
+
+.category-icon{
+    display:block;
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+/* DIFFICULTY */
+
+.difficulty{
+    display:flex;
+    gap:10px;
+}
+
+.diff{
+    flex:1;
+    padding:13px;
+    border-radius:10px;
+    background:var(--bg);
+    color:var(--text);
+    border:2px solid var(--border);
+}
+
+.diff.selected{
+    background:var(--primary);
+    color:white;
+    border-color:var(--primary);
+}
+
+/* BUTTON */
+
+.main-btn{
+    width:100%;
+    padding:16px;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+    border-radius:12px;
+    font-size:17px;
+    font-weight:bold;
+    margin-top:25px;
+}
+
+.main-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* QUIZ */
+
+.quiz-card{
+    background:var(--card);
+    padding:30px;
+    border-radius:22px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.quiz-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:15px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.timer{
+    padding:8px 14px;
+    border-radius:20px;
+    background:#fff3cd;
+    color:#856404;
+}
+
+.timer.danger{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.lives{
+    color:#ef4444;
+}
+
+.progress{
+    width:100%;
+    height:8px;
+    background:var(--bg);
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:25px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0;
+    background:var(--primary);
+    transition:.3s;
+}
+
+.question{
+    font-size:25px;
+    line-height:1.5;
+    margin-bottom:25px;
+}
+
+.answers{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.answer{
+    width:100%;
+    padding:16px;
+    border:2px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    border-radius:12px;
+    text-align:left;
+    font-size:16px;
+}
+
+.answer:hover:not(:disabled){
+    border-color:var(--primary);
+    background:rgba(108,99,255,.08);
+}
+
+.answer.correct{
+    background:#dcfce7;
+    border-color:#22c55e;
+    color:#166534;
+}
+
+.answer.wrong{
+    background:#fee2e2;
+    border-color:#ef4444;
+    color:#991b1b;
+}
+
+.answer:disabled{
+    cursor:not-allowed;
+}
+
+.quiz-actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.hint-btn{
+    padding:14px 20px;
+    border-radius:10px;
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.next-btn{
+    flex:1;
+    padding:14px;
+    border-radius:10px;
+    background:var(--primary);
+    color:white;
+    font-weight:bold;
+}
+
+.hint{
+    background:#fef3c7;
+    color:#92400e;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+}
+
+.explanation{
+    background:#eef2ff;
+    color:#3730a3;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+    line-height:1.5;
+}
+
+/* RESULT */
+
+.result{
+    background:var(--card);
+    padding:40px;
+    border-radius:22px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.trophy{
+    font-size:80px;
+}
+
+.result h1{
+    margin:15px 0;
+}
+
+.score-circle{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    background:var(--primary);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    margin:25px auto;
+}
+
+.score-number{
+    font-size:38px;
+    font-weight:bold;
+}
+
+.score-label{
+    font-size:13px;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin:25px 0;
+}
+
+.result-item{
+    padding:15px;
+    background:var(--bg);
+    border-radius:12px;
+}
+
+.result-item strong{
+    display:block;
+    font-size:22px;
+    color:var(--primary);
+}
+
+.result-item span{
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* LEADERBOARD */
+
+.leaderboard{
+    background:var(--card);
+    padding:30px;
+    border-radius:20px;
+    margin-top:20px;
+}
+
+.leaderboard h2{
+    margin-bottom:15px;
+}
+
+.rank{
+    display:flex;
+    justify-content:space-between;
+    padding:12px;
+    border-bottom:1px solid var(--border);
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    .home{
+        padding:25px;
+    }
+
+    .home h1{
+        font-size:32px;
+    }
+
+    .categories{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .stats,
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+
+    .quiz-top{
+        flex-wrap:wrap;
+    }
+
+    .question{
+        font-size:21px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+
+```
+<div class="logo">
+    🧠 GK Master
+</div>
+
+<div class="header-right">
+
+    <button class="icon-btn" id="themeBtn">
+        🌙
+    </button>
+
+    <button class="icon-btn" id="homeBtn">
+        🏠
+    </button>
+
+</div>
+```
+
+</header>
+
+<!-- HOME -->
+
+<section id="homeScreen">
+
+<div class="home">
+
+```
+<div class="hero-icon">
+    🧠
+</div>
+
+<h1>GK Master Quiz</h1>
+
+<p>
+    Challenge yourself and improve your General Knowledge.
+</p>
+
+
+<div class="stats">
+
+    <div class="stat">
+        <strong id="bestScore">0</strong>
+        <span>Best Score</span>
+    </div>
+
+    <div class="stat">
+        <strong>50+</strong>
+        <span>Questions</span>
+    </div>
+
+    <div class="stat">
+        <strong>7</strong>
+        <span>Categories</span>
+    </div>
+
+</div>
+
+
+<h3 class="section-title">
+    Select Category
+</h3>
+
+
+<div class="categories">
+
+    <button class="category selected" data-category="all">
+        <span class="category-icon">🌎</span>
+        All GK
+    </button>
+
+    <button class="category" data-category="india">
+        <span class="category-icon">🇮🇳</span>
+        India GK
+    </button>
+
+    <button class="category" data-category="history">
+        <span class="category-icon">🏛️</span>
+        History
+    </button>
+
+    <button class="category" data-category="geography">
+        <span class="category-icon">🌍</span>
+        Geography
+    </button>
+
+    <button class="category" data-category="science">
+        <span class="category-icon">🔬</span>
+        Science
+    </button>
+
+    <button class="category" data-category="sports">
+        <span class="category-icon">🏏</span>
+        Sports
+    </button>
+
+    <button class="category" data-category="technology">
+        <span class="category-icon">💻</span>
+        Technology
+    </button>
+
+    <button class="category" data-category="current">
+        <span class="category-icon">📰</span>
+        Current Affairs
+    </button>
+
+</div>
+
+
+<h3 class="section-title">
+    Select Difficulty
+</h3>
+
+
+<div class="difficulty">
+
+    <button class="diff selected" data-difficulty="easy">
+        Easy
+    </button>
+
+    <button class="diff" data-difficulty="medium">
+        Medium
+    </button>
+
+    <button class="diff" data-difficulty="hard">
+        Hard
+    </button>
+
+</div>
+
+
+<button class="main-btn" id="startBtn">
+    🚀 Start Quiz
+</button>
+```
+
+</div>
+
+<div class="leaderboard">
+
+```
+<h2>🏆 Best Scores</h2>
+
+<div id="leaderboardList">
+    No scores yet.
+</div>
+```
+
+</div>
+
+</section>
+
+<!-- QUIZ -->
+
+<section id="quizScreen" class="hidden">
+
+<div class="quiz-card">
+
+```
+<div class="quiz-top">
+
+    <span id="questionNumber">
+        Question 1 / 10
+    </span>
+
+    <span class="timer" id="timer">
+        ⏱ 15
+    </span>
+
+    <span id="scoreDisplay">
+        Score: 0
+    </span>
+
+    <span class="lives" id="lives">
+        ❤️❤️❤️
+    </span>
+
+</div>
+
+
+<div class="progress">
+
+    <div class="progress-bar" id="progressBar"></div>
+
+</div>
+
+
+<h2 class="question" id="question">
+    Question
+</h2>
+
+
+<div class="answers" id="answers"></div>
+
+
+<div id="hintBox" class="hint hidden"></div>
+
+<div id="explanationBox" class="explanation hidden"></div>
+
+
+<div class="quiz-actions">
+
+    <button class="hint-btn" id="hintBtn">
+        💡 Hint
+    </button>
+
+    <button class="next-btn hidden" id="nextBtn">
+        Next →
+    </button>
+
+</div>
+```
+
+</div>
+
+</section>
+
+<!-- RESULT -->
+
+<section id="resultScreen" class="hidden">
+
+<div class="result">
+
+```
+<div class="trophy" id="trophy">
+    🏆
+</div>
+
+<h1>Quiz Completed!</h1>
+
+<div class="score-circle">
+
+    <span class="score-number" id="finalScore">
+        0
+    </span>
+
+    <span class="score-label">
+        SCORE
+    </span>
+
+</div>
+
+
+<h2 id="resultMessage">
+    Great Job!
+</h2>
+
+<p id="resultText">
+    You completed the quiz.
+</p>
+
+
+<div class="result-grid">
+
+    <div class="result-item">
+
+        <strong id="correctCount">
+            0
+        </strong>
+
+        <span>Correct</span>
+
+    </div>
+
+
+    <div class="result-item">
+
+        <strong id="wrongCount">
+            0
+        </strong>
+
+        <span>Wrong</span>
+
+    </div>
+
+
+    <div class="result-item">
+
+        <strong id="percentage">
+            0%
+        </strong>
+
+        <span>Accuracy</span>
+
+    </div>
+
+</div>
+
+
+<button class="main-btn" id="restartBtn">
+    🔄 Play Again
+</button>
+```
+
+</div>
+
+</section>
+
+</div>
+
+<script>
+
+/* =========================
+   QUESTION DATABASE
+========================= */
+
+const questions = [
+
+{
+category:"india",
+difficulty:"easy",
+question:"What is the capital of India?",
+answers:["Mumbai","New Delhi","Chennai","Kolkata"],
+correct:"New Delhi",
+hint:"It is the seat of the Government of India.",
+explanation:"New Delhi is the capital of India."
+},
+
+{
+category:"india",
+difficulty:"easy",
+question:"What is the national animal of India?",
+answers:["Lion","Tiger","Elephant","Leopard"],
+correct:"Tiger",
+hint:"It is a large striped cat.",
+explanation:"The Bengal tiger is India's national animal."
+},
+
+{
+category:"india",
+difficulty:"easy",
+question:"Which is the national bird of India?",
+answers:["Eagle","Peacock","Sparrow","Parrot"],
+correct:"Peacock",
+hint:"It is famous for its colorful feathers.",
+explanation:"The Indian peacock is the national bird of India."
+},
+
+{
+category:"india",
+difficulty:"medium",
+question:"Who was the first Prime Minister of India?",
+answers:["Mahatma Gandhi","Jawaharlal Nehru","Sardar Patel","Rajendra Prasad"],
+correct:"Jawaharlal Nehru",
+hint:"He served as Prime Minister from 1947.",
+explanation:"Jawaharlal Nehru became India's first Prime Minister in 1947."
+},
+
+{
+category:"india",
+difficulty:"hard",
+question:"Which Indian state has the longest coastline?",
+answers:["Tamil Nadu","Gujarat","Andhra Pradesh","Maharashtra"],
+correct:"Gujarat",
+hint:"It is located on India's western coast.",
+explanation:"Gujarat has the longest coastline among Indian states."
+},
+
+{
+category:"history",
+difficulty:"easy",
+question:"Who built the Taj Mahal?",
+answers:["Akbar","Shah Jahan","Aurangzeb","Babur"],
+correct:"Shah Jahan",
+hint:"He was a Mughal emperor.",
+explanation:"Mughal emperor Shah Jahan commissioned the Taj Mahal."
+},
+
+{
+category:"history",
+difficulty:"easy",
+question:"Who is known as the Father of the Nation in India?",
+answers:["Jawaharlal Nehru","Mahatma Gandhi","B. R. Ambedkar","Subhas Chandra Bose"],
+correct:"Mahatma Gandhi",
+hint:"He led India's non-violent freedom movement.",
+explanation:"Mahatma Gandhi is widely known as the Father of the Nation in India."
+},
+
+{
+category:"history",
+difficulty:"medium",
+question:"In which year did India gain independence?",
+answers:["1945","1946","1947","1950"],
+correct:"1947",
+hint:"It happened on August 15.",
+explanation:"India became independent from British rule on August 15, 1947."
+},
+
+{
+category:"history",
+difficulty:"hard",
+question:"Who founded the Maurya Empire?",
+answers:["Ashoka","Chandragupta Maurya","Bindusara","Harsha"],
+correct:"Chandragupta Maurya",
+hint:"His adviser was Chanakya.",
+explanation:"Chandragupta Maurya founded the Maurya Empire."
+},
+
+{
+category:"geography",
+difficulty:"easy",
+question:"Which is the largest continent?",
+answers:["Africa","Asia","Europe","Australia"],
+correct:"Asia",
+hint:"It contains India and China.",
+explanation:"Asia is the largest continent by area."
+},
+
+{
+category:"geography",
+difficulty:"easy",
+question:"Which is the largest ocean?",
+answers:["Atlantic Ocean","Indian Ocean","Pacific Ocean","Arctic Ocean"],
+correct:"Pacific Ocean",
+hint:"It lies between Asia and the Americas.",
+explanation:"The Pacific Ocean is the largest ocean on Earth."
+},
+
+{
+category:"geography",
+difficulty:"medium",
+question:"Which river is the longest in India?",
+answers:["Yamuna","Ganga","Godavari","Krishna"],
+correct:"Ganga",
+hint:"It is one of India's most important rivers.",
+explanation:"The Ganga is the longest river within India."
+},
+
+{
+category:"geography",
+difficulty:"hard",
+question:"Which is the highest mountain in the world?",
+answers:["K2","Mount Everest","Kangchenjunga","Lhotse"],
+correct:"Mount Everest",
+hint:"It lies in the Himalayas.",
+explanation:"Mount Everest is the world's highest mountain above sea level."
+},
+
+{
+category:"science",
+difficulty:"easy",
+question:"Which planet is known as the Red Planet?",
+answers:["Venus","Mars","Jupiter","Mercury"],
+correct:"Mars",
+hint:"Its surface contains iron-rich material.",
+explanation:"Mars is commonly called the Red Planet."
+},
+
+{
+category:"science",
+difficulty:"easy",
+question:"What gas do humans need to breathe?",
+answers:["Carbon dioxide","Oxygen","Hydrogen","Nitrogen"],
+correct:"Oxygen",
+hint:"It makes up about one-fifth of Earth's atmosphere.",
+explanation:"Humans require oxygen for cellular respiration."
+},
+
+{
+category:"science",
+difficulty:"medium",
+question:"What is H2O commonly known as?",
+answers:["Hydrogen","Oxygen","Water","Salt"],
+correct:"Water",
+hint:"It is essential for life.",
+explanation:"H2O is the chemical formula for water."
+},
+
+{
+category:"science",
+difficulty:"hard",
+question:"What is the SI unit of electric resistance?",
+answers:["Volt","Ampere","Ohm","Watt"],
+correct:"Ohm",
+hint:"Its symbol is Ω.",
+explanation:"The ohm is the SI unit of electrical resistance."
+},
+
+{
+category:"sports",
+difficulty:"easy",
+question:"How many players are there in a cricket team?",
+answers:["9","10","11","12"],
+correct:"11",
+hint:"A standard team has eleven players.",
+explanation:"A cricket team consists of 11 players."
+},
+
+{
+category:"sports",
+difficulty:"easy",
+question:"Which sport uses a shuttlecock?",
+answers:["Tennis","Badminton","Football","Hockey"],
+correct:"Badminton",
+hint:"It is played with a racket.",
+explanation:"Badminton is played using a shuttlecock and rackets."
+},
+
+{
+category:"sports",
+difficulty:"medium",
+question:"How many rings are on the Olympic flag?",
+answers:["4","5","6","7"],
+correct:"5",
+hint:"They represent the Olympic rings.",
+explanation:"The Olympic symbol consists of five interlocking rings."
+},
+
+{
+category:"technology",
+difficulty:"easy",
+question:"What does CPU stand for?",
+answers:[
+"Central Processing Unit",
+"Computer Personal Unit",
+"Central Program Utility",
+"Computer Processing Utility"
+],
+correct:"Central Processing Unit",
+hint:"It is often called the brain of a computer.",
+explanation:"CPU stands for Central Processing Unit."
+},
+
+{
+category:"technology",
+difficulty:"easy",
+question:"Which language is used to structure web pages?",
+answers:["CSS","HTML","Python","SQL"],
+correct:"HTML",
+hint:"It uses tags such as headings and paragraphs.",
+explanation:"HTML is the standard markup language used to structure web pages."
+},
+
+{
+category:"technology",
+difficulty:"medium",
+question:"What does AI stand for?",
+answers:[
+"Automated Internet",
+"Artificial Intelligence",
+"Advanced Information",
+"Automatic Integration"
+],
+correct:"Artificial Intelligence",
+hint:"It involves machines performing tasks associated with human intelligence.",
+explanation:"AI stands for Artificial Intelligence."
+},
+
+{
+category:"technology",
+difficulty:"hard",
+question:"Which data structure follows FIFO?",
+answers:["Stack","Queue","Tree","Graph"],
+correct:"Queue",
+hint:"The first item added is the first item removed.",
+explanation:"A queue follows the First In, First Out principle."
+},
+
+{
+category:"current",
+difficulty:"easy",
+question:"Which organization is responsible for the World Health Organization?",
+answers:[
+"United Nations",
+"World Bank",
+"International Monetary Fund",
+"World Trade Organization"
+],
+correct:"United Nations",
+hint:"WHO is a specialized agency of this international organization.",
+explanation:"The World Health Organization is a specialized agency of the United Nations."
+},
+
+{
+category:"current",
+difficulty:"medium",
+question:"What does GDP stand for?",
+answers:[
+"Gross Domestic Product",
+"General Development Plan",
+"Global Domestic Production",
+"Gross Development Percentage"
+],
+correct:"Gross Domestic Product",
+hint:"It measures the value of goods and services produced.",
+explanation:"GDP stands for Gross Domestic Product."
+},
+
+{
+category:"current",
+difficulty:"hard",
+question:"Which body conducts India's national population census?",
+answers:[
+"Election Commission of India",
+"Office of the Registrar General and Census Commissioner",
+"Reserve Bank of India",
+"Union Public Service Commission"
+],
+correct:"Office of the Registrar General and Census Commissioner",
+hint:"It is part of the Ministry of Home Affairs.",
+explanation:"India's census is conducted by the Office of the Registrar General and Census Commissioner."
+}
+
+];
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let selectedCategory = "all";
+
+let selectedDifficulty = "easy";
+
+let quizQuestions = [];
+
+let currentQuestion = 0;
+
+let score = 0;
+
+let correctAnswers = 0;
+
+let wrongAnswers = 0;
+
+let lives = 3;
+
+let streak = 0;
+
+let hintsUsed = 0;
+
+let timeLeft = 15;
+
+let timer = null;
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const homeScreen =
+document.getElementById("homeScreen");
+
+const quizScreen =
+document.getElementById("quizScreen");
+
+const resultScreen =
+document.getElementById("resultScreen");
+
+const startBtn =
+document.getElementById("startBtn");
+
+const nextBtn =
+document.getElementById("nextBtn");
+
+const restartBtn =
+document.getElementById("restartBtn");
+
+const questionElement =
+document.getElementById("question");
+
+const answersElement =
+document.getElementById("answers");
+
+const questionNumber =
+document.getElementById("questionNumber");
+
+const scoreDisplay =
+document.getElementById("scoreDisplay");
+
+const progressBar =
+document.getElementById("progressBar");
+
+const timerElement =
+document.getElementById("timer");
+
+const livesElement =
+document.getElementById("lives");
+
+const hintBtn =
+document.getElementById("hintBtn");
+
+const hintBox =
+document.getElementById("hintBox");
+
+const explanationBox =
+document.getElementById("explanationBox");
+
+const bestScoreElement =
+document.getElementById("bestScore");
+
+const leaderboardList =
+document.getElementById("leaderboardList");
+
+
+/* =========================
+   CATEGORY
+========================= */
+
+document.querySelectorAll(".category")
+.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".category")
+        .forEach(btn =>
+            btn.classList.remove("selected")
+        );
+
+        button.classList.add("selected");
+
+        selectedCategory =
+            button.dataset.category;
+
+    });
+
+});
+
+
+/* =========================
+   DIFFICULTY
+========================= */
+
+document.querySelectorAll(".diff")
+.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".diff")
+        .forEach(btn =>
+            btn.classList.remove("selected")
+        );
+
+        button.classList.add("selected");
+
+        selectedDifficulty =
+            button.dataset.difficulty;
+
+    });
+
+});
+
+
+/* =========================
+   START
+========================= */
+
+startBtn.addEventListener(
+"click",
+startQuiz
+);
+
+
+function startQuiz(){
+
+    let filtered =
+    questions.filter(q =>
+
+        (selectedCategory === "all" ||
+        q.category === selectedCategory)
+
+        &&
+
+        q.difficulty === selectedDifficulty
+
+    );
+
+
+    /*
+       If selected difficulty has
+       fewer questions, use all
+       questions from category.
+    */
+
+    if(filtered.length < 5){
+
+        filtered =
+        questions.filter(q =>
+
+            selectedCategory === "all" ||
+            q.category === selectedCategory
+
+        );
+
+    }
+
+
+    quizQuestions =
+    [...filtered]
+    .sort(() => Math.random() - 0.5)
+    .slice(0,10);
+
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    correctAnswers = 0;
+
+    wrongAnswers = 0;
+
+    lives = 3;
+
+    streak = 0;
+
+    hintsUsed = 0;
+
+
+    homeScreen.classList.add("hidden");
+
+    resultScreen.classList.add("hidden");
+
+    quizScreen.classList.remove("hidden");
+
+
+    scoreDisplay.textContent =
+    "Score: 0";
+
+
+    updateLives();
+
+    showQuestion();
+
+}
+
+
+/* =========================
+   SHOW QUESTION
+========================= */
+
+function showQuestion(){
+
+    clearInterval(timer);
+
+    answersElement.innerHTML = "";
+
+    nextBtn.classList.add("hidden");
+
+    hintBox.classList.add("hidden");
+
+    explanationBox.classList.add("hidden");
+
+    hintBtn.disabled = false;
+
+
+    const q =
+    quizQuestions[currentQuestion];
+
+
+    questionElement.textContent =
+    q.question;
+
+
+    questionNumber.textContent =
+    `Question ${currentQuestion + 1} / ${quizQuestions.length}`;
+
+
+    progressBar.style.width =
+    `${((currentQuestion + 1) / quizQuestions.length) * 100}%`;
+
+
+    q.answers.forEach(answer => {
+
+        const button =
+        document.createElement("button");
+
+        button.className =
+        "answer";
+
+        button.textContent =
+        answer;
+
+        button.addEventListener(
+        "click",
+        () => selectAnswer(button, answer)
+        );
+
+        answersElement.appendChild(button);
+
+    });
+
+
+    startTimer();
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function startTimer(){
+
+    timeLeft = 15;
+
+    timerElement.textContent =
+    "⏱ " + timeLeft;
+
+    timerElement.classList.remove("danger");
+
+
+    timer = setInterval(() => {
+
+        timeLeft--;
+
+        timerElement.textContent =
+        "⏱ " + timeLeft;
+
+
+        if(timeLeft <= 5){
+
+            timerElement.classList.add("danger");
+
+        }
+
+
+        if(timeLeft <= 0){
+
+            clearInterval(timer);
+
+            timeUp();
+
+        }
+
+    },1000);
+
+}
+
+
+/* =========================
+   ANSWER
+========================= */
+
+function selectAnswer(button, answer){
+
+    clearInterval(timer);
+
+    const q =
+    quizQuestions[currentQuestion];
+
+
+    const buttons =
+    document.querySelectorAll(".answer");
+
+
+    buttons.forEach(btn => {
+
+        btn.disabled = true;
+
+        if(btn.textContent === q.correct){
+
+            btn.classList.add("correct");
+
+        }
+
+    });
+
+
+    if(answer === q.correct){
+
+        button.classList.add("correct");
+
+        correctAnswers++;
+
+        streak++;
+
+        score += 10 + (streak * 2);
+
+
+        scoreDisplay.textContent =
+        "Score: " + score;
+
+    }
+
+    else{
+
+        button.classList.add("wrong");
+
+        wrongAnswers++;
+
+        streak = 0;
+
+        lives--;
+
+        updateLives();
+
+    }
+
+
+    explanationBox.textContent =
+    "📖 " + q.explanation;
+
+    explanationBox.classList.remove("hidden");
+
+    nextBtn.classList.remove("hidden");
+
+
+    if(lives <= 0){
+
+        setTimeout(() => {
+
+            showResult();
+
+        },700);
+
+    }
+
+}
+
+
+/* =========================
+   TIME UP
+========================= */
+
+function timeUp(){
+
+    const q =
+    quizQuestions[currentQuestion];
+
+
+    const buttons =
+    document.querySelectorAll(".answer");
+
+
+    buttons.forEach(btn => {
+
+        btn.disabled = true;
+
+        if(btn.textContent === q.correct){
+
+            btn.classList.add("correct");
+
+        }
+
+    });
+
+
+    wrongAnswers++;
+
+    lives--;
+
+    streak = 0;
+
+    updateLives();
+
+
+    explanationBox.textContent =
+    "⏰ Time's up! " + q.explanation;
+
+    explanationBox.classList.remove("hidden");
+
+
+    nextBtn.classList.remove("hidden");
+
+
+    if(lives <= 0){
+
+        setTimeout(() => {
+
+            showResult();
+
+        },700);
+
+    }
+
+}
+
+
+/* =========================
+   NEXT
+========================= */
+
+nextBtn.addEventListener(
+"click",
+nextQuestion
+);
+
+
+function nextQuestion(){
+
+    currentQuestion++;
+
+
+    if(currentQuestion >= quizQuestions.length){
+
+        showResult();
+
+        return;
+
+    }
+
+
+    showQuestion();
+
+}
+
+
+/* =========================
+   HINT
+========================= */
+
+hintBtn.addEventListener(
+"click",
+showHint
+);
+
+
+function showHint(){
+
+    const q =
+    quizQuestions[currentQuestion];
+
+
+    hintBox.textContent =
+    "💡 Hint: " + q.hint;
+
+
+    hintBox.classList.remove("hidden");
+
+    hintBtn.disabled = true;
+
+    hintsUsed++;
+
+}
+
+
+/* =========================
+   LIVES
+========================= */
+
+function updateLives(){
+
+    livesElement.textContent =
+    "❤️".repeat(lives) +
+    "🖤".repeat(3 - lives);
+
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+function showResult(){
+
+    clearInterval(timer);
+
+    quizScreen.classList.add("hidden");
+
+    resultScreen.classList.remove("hidden");
+
+
+    const total =
+    quizQuestions.length;
+
+
+    const percentage =
+    Math.round((correctAnswers / total) * 100);
+
+
+    document.getElementById("finalScore")
+    .textContent = score;
+
+
+    document.getElementById("correctCount")
+    .textContent = correctAnswers;
+
+
+    document.getElementById("wrongCount")
+    .textContent = wrongAnswers;
+
+
+    document.getElementById("percentage")
+    .textContent = percentage + "%";
+
+
+    let message;
+
+
+    if(percentage === 100){
+
+        message =
+        "Perfect! Outstanding! 🎉";
+
+    }
+
+    else if(percentage >= 80){
+
+        message =
+        "Excellent Performance! 🌟";
+
+    }
+
+    else if(percentage >= 60){
+
+        message =
+        "Great Job! 👍";
+
+    }
+
+    else if(percentage >= 40){
+
+        message =
+        "Good Attempt! Keep Practicing! 💪";
+
+    }
+
+    else{
+
+        message =
+        "Keep Learning and Try Again! 📚";
+
+    }
+
+
+    document.getElementById("resultMessage")
+    .textContent = message;
+
+
+    document.getElementById("resultText")
+    .textContent =
+    `You answered ${correctAnswers} out of ${total} questions correctly.`;
+
+
+    saveScore(score);
+
+}
+
+
+/* =========================
+   RESTART
+========================= */
+
+restartBtn.addEventListener(
+"click",
+() => {
+
+    resultScreen.classList.add("hidden");
+
+    homeScreen.classList.remove("hidden");
+
+}
+);
+
+
+/* =========================
+   HOME
+========================= */
+
+document.getElementById("homeBtn")
+.addEventListener("click", () => {
+
+    clearInterval(timer);
+
+    quizScreen.classList.add("hidden");
+
+    resultScreen.classList.add("hidden");
+
+    homeScreen.classList.remove("hidden");
+
+});
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+document.getElementById("themeBtn")
+.addEventListener("click", () => {
+
+    document.body.classList.toggle("dark");
+
+    const dark =
+    document.body.classList.contains("dark");
+
+    document.getElementById("themeBtn")
+    .textContent =
+    dark ? "☀️" : "🌙";
+
+});
+
+
+/* =========================
+   LEADERBOARD
+========================= */
+
+function saveScore(score){
+
+    let scores =
+    JSON.parse(
+        localStorage.getItem("gkScores") || "[]"
+    );
+
+
+    scores.push({
+
+        score:score,
+
+        date:new Date().toLocaleDateString()
+
+    });
+
+
+    scores.sort(
+        (a,b) => b.score - a.score
+    );
+
+
+    scores =
+    scores.slice(0,5);
+
+
+    localStorage.setItem(
+        "gkScores",
+        JSON.stringify(scores)
+    );
+
+
+    updateLeaderboard();
+
+}
+
+
+/* =========================
+   UPDATE LEADERBOARD
+========================= */
+
+function updateLeaderboard(){
+
+    let scores =
+    JSON.parse(
+        localStorage.getItem("gkScores") || "[]"
+    );
+
+
+    if(scores.length === 0){
+
+        leaderboardList.textContent =
+        "No scores yet.";
+
+        bestScoreElement.textContent =
+        "0";
+
+        return;
+
+    }
+
+
+    bestScoreElement.textContent =
+    scores[0].score;
+
+
+    leaderboardList.innerHTML =
+    "";
+
+
+    scores.forEach((item,index) => {
+
+        const row =
+        document.createElement("div");
+
+        row.className =
+        "rank";
+
+
+        row.innerHTML =
+        `<span>${index + 1}. 🏆 Player</span>
+         <strong>${item.score}</strong>`;
+
+
+        leaderboardList.appendChild(row);
+
+    });
+
+}
+
+
+/* =========================
+   INITIALIZE
+========================= */
+
+updateLeaderboard();
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
